@@ -6,8 +6,8 @@ app = Flask(__name__)
 sqlite_path = './data'
 CORS(app, supports_credentials=True)
 
-@app.route('/', methods=['GET', 'POST'])
-def index():
+@app.route('/api', methods=['GET', 'POST'])
+def api():
     global sqlite_path
     path = request.form.get('path')
     dirs_arr = []
@@ -31,6 +31,10 @@ def index():
     # data['len'] = len(data['data'])
     data['dirs'] = dirs_arr
     return jsonify(data)
+
+@app.route('/', methods=['GET'])
+def index():
+    return render_template('show.html')
 
 if __name__ == "__main__":
     app.run(host="127.0.0.1", port=8383, debug=True)

@@ -15,11 +15,11 @@
 </body>
 <script type="text/javascript">
     var chart1 = echarts.init(document.getElementById('chart1'));
-
+    var API = 'http://127.0.0.1:8383/api'
     function sel_change() {
         var sel = document.getElementById("sel");
         var val = sel.options[sel.selectedIndex].value;
-        fetch('http://127.0.0.1:8383/', {
+        fetch(API, {
             method: 'POST',
             // mode: "cors",
             headers: {
@@ -69,7 +69,7 @@
             })
     }
 
-    fetch('http://127.0.0.1:8383/')
+    fetch(API)
         .then(res => res.json())
         .then(function (json) {
             var selectID = document.getElementById('sel')
