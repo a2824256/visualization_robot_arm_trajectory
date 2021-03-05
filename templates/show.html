@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>ArmData</title>
+    <script src="https://cdn.jsdelivr.net/npm/echarts/dist/echarts.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/echarts-gl/dist/echarts-gl.min.js"></script>
+</head>
+<body>
+<div class="first-row">
+    <select id="sel" onchange="sel_change()">
+    </select>
+    <div id="chart1" style="margin-left: 400px;width: 800px;height:800px;"></div>
+</div>
+</body>
+<script type="text/javascript">
+    var chart1 = echarts.init(document.getElementById('chart1'));
+
+    function sel_change() {
+        var sel = document.getElementById("sel");
+        var val = sel.options[sel.selectedIndex].value;
+        fetch('http://127.0.0.1:8383/', {
+            method: 'POST',
+            // mode: "cors",
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            body:
+                'path=' + val
+        })
+            .then(res => res.json())
+            .then(function (json) {
+                chart1.clear()
+                option = {
+                    tooltip: {},
+                    backgroundColor: '#fff',
+                    visualMap: {
+                        show: false,
+                        dimension: 2,
+                        min: 0,
+                        max: 30,
+                        inRange: {
+                            color: ['#313695', '#4575b4', '#74add1', '#abd9e9', '#e0f3f8', '#ffffbf', '#fee090', '#fdae61', '#f46d43', '#d73027', '#a50026']
+                        }
+                    },
+                    xAxis3D: {
+                        type: 'value'
+                    },
+                    yAxis3D: {
+                        type: 'value'
+                    },
+                    zAxis3D: {
+                        type: 'value'
+                    },
+                    grid3D: {
+                        viewControl: {
+                            projection: 'orthographic'
+                        }
+                    },
+                    series: [{
+                        type: 'line3D',
+                        data: json['data'],
+                        lineStyle: {
+                            width: 4
+                        }
+                    }]
+                };
+                chart1.setOption(option);
+            })
+    }
+
+    fetch('http://127.0.0.1:8383/')
+        .then(res => res.json())
+        .then(function (json) {
+            var selectID = document.getElementById('sel')
+            for (var i in json['dirs']) {
+                var option = document.createElement("option")
+                option.appendChild(document.createTextNode(json['dirs'][i]))
+                option.setAttribute("value", json['dirs'][i])
+                selectID.appendChild(option)
+            }
+            option = {
+                tooltip: {},
+                backgroundColor: '#fff',
+                visualMap: {
+                    show: false,
+                    dimension: 2,
+                    min: 0,
+                    max: 30,
+                    inRange: {
+                        color: ['#313695', '#4575b4', '#74add1', '#abd9e9', '#e0f3f8', '#ffffbf', '#fee090', '#fdae61', '#f46d43', '#d73027', '#a50026']
+                    }
+                },
+                xAxis3D: {
+                    type: 'value'
+                },
+                yAxis3D: {
+                    type: 'value'
+                },
+                zAxis3D: {
+                    type: 'value'
+                },
+                grid3D: {
+                    viewControl: {
+                        projection: 'orthographic'
+                    }
+                },
+                series: [{
+                    type: 'line3D',
+                    data: json['data'],
+                    lineStyle: {
+                        width: 4
+                    }
+                }]
+            };
+            chart1.setOption(option);
+        })
+
+    // var chart1 = echarts.init(document.getElementById('chart1'));
+    //
+    // var data = [];
+    // // Parametric curve
+    // for (var t = 0; t < 25; t += 0.001) {
+    //     var x = (1 + 0.25 * Math.cos(75 * t)) * Math.cos(t);
+    //     var y = (1 + 0.25 * Math.cos(75 * t)) * Math.sin(t);
+    //     var z = t + 2.0 * Math.sin(75 * t);
+    //     data.push([x, y, z]);
+    // }
+    // console.log('data');
+    // console.log(data);
+    //
+    // option = {
+    //     tooltip: {},
+    //     backgroundColor: '#fff',
+    //     visualMap: {
+    //         show: false,
+    //         dimension: 2,
+    //         min: 0,
+    //         max: 30,
+    //         inRange: {
+    //             color: ['#313695', '#4575b4', '#74add1', '#abd9e9', '#e0f3f8', '#ffffbf', '#fee090', '#fdae61', '#f46d43', '#d73027', '#a50026']
+    //         }
+    //     },
+    //     xAxis3D: {
+    //         type: 'value'
+    //     },
+    //     yAxis3D: {
+    //         type: 'value'
+    //     },
+    //     zAxis3D: {
+    //         type: 'value'
+    //     },
+    //     grid3D: {
+    //         viewControl: {
+    //             projection: 'orthographic'
+    //         }
+    //     },
+    //     series: [{
+    //         type: 'line3D',
+    //         data: data,
+    //         lineStyle: {
+    //             width: 4
+    //         }
+    //     }]
+    // };
+    // chart1.setOption(option);
+</script>
+</html>
